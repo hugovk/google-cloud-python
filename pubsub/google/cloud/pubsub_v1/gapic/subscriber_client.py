@@ -46,7 +46,10 @@ from google.protobuf import field_mask_pb2
 from google.protobuf import timestamp_pb2
 
 
-_GAPIC_LIBRARY_VERSION = pkg_resources.get_distribution("google-cloud-pubsub").version
+
+_GAPIC_LIBRARY_VERSION = pkg_resources.get_distribution(
+    'google-cloud-pubsub',
+).version
 
 
 class SubscriberClient(object):
@@ -56,19 +59,19 @@ class SubscriberClient(object):
     establishing a bi-directional stream using the ``StreamingPull`` method.
     """
 
-    SERVICE_ADDRESS = "pubsub.googleapis.com:443"
+    SERVICE_ADDRESS = 'pubsub.googleapis.com:443'
     """The default address of the service."""
 
     # The scopes needed to make gRPC calls to all of the methods defined in
     # this service
     _DEFAULT_SCOPES = (
-        "https://www.googleapis.com/auth/cloud-platform",
-        "https://www.googleapis.com/auth/pubsub",
-    )
+        'https://www.googleapis.com/auth/cloud-platform',
+        'https://www.googleapis.com/auth/pubsub', )
 
     # The name of the interface for this client. This is the key used to
     # find the method configuration in the client_config dictionary.
-    _INTERFACE_NAME = "google.pubsub.v1.Subscriber"
+    _INTERFACE_NAME = 'google.pubsub.v1.Subscriber'
+
 
     @classmethod
     def from_service_account_file(cls, filename, *args, **kwargs):
@@ -84,24 +87,27 @@ class SubscriberClient(object):
         Returns:
             SubscriberClient: The constructed client.
         """
-        credentials = service_account.Credentials.from_service_account_file(filename)
-        kwargs["credentials"] = credentials
+        credentials = service_account.Credentials.from_service_account_file(
+            filename)
+        kwargs['credentials'] = credentials
         return cls(*args, **kwargs)
 
     from_service_account_json = from_service_account_file
+
 
     @classmethod
     def project_path(cls, project):
         """Return a fully-qualified project string."""
         return google.api_core.path_template.expand(
-            "projects/{project}", project=project
+            'projects/{project}',
+            project=project,
         )
 
     @classmethod
     def snapshot_path(cls, project, snapshot):
         """Return a fully-qualified snapshot string."""
         return google.api_core.path_template.expand(
-            "projects/{project}/snapshots/{snapshot}",
+            'projects/{project}/snapshots/{snapshot}',
             project=project,
             snapshot=snapshot,
         )
@@ -110,7 +116,7 @@ class SubscriberClient(object):
     def subscription_path(cls, project, subscription):
         """Return a fully-qualified subscription string."""
         return google.api_core.path_template.expand(
-            "projects/{project}/subscriptions/{subscription}",
+            'projects/{project}/subscriptions/{subscription}',
             project=project,
             subscription=subscription,
         )
@@ -119,18 +125,13 @@ class SubscriberClient(object):
     def topic_path(cls, project, topic):
         """Return a fully-qualified topic string."""
         return google.api_core.path_template.expand(
-            "projects/{project}/topics/{topic}", project=project, topic=topic
+            'projects/{project}/topics/{topic}',
+            project=project,
+            topic=topic,
         )
 
-    def __init__(
-        self,
-        transport=None,
-        channel=None,
-        credentials=None,
-        client_config=None,
-        client_info=None,
-        client_options=None,
-    ):
+    def __init__(self, transport=None, channel=None, credentials=None,
+            client_config=None, client_info=None, client_options=None):
         """Constructor.
 
         Args:
@@ -166,27 +167,20 @@ class SubscriberClient(object):
         """
         # Raise deprecation warnings for things we want to go away.
         if client_config is not None:
-            warnings.warn(
-                "The `client_config` argument is deprecated.",
-                PendingDeprecationWarning,
-                stacklevel=2,
-            )
+            warnings.warn('The `client_config` argument is deprecated.',
+                          PendingDeprecationWarning, stacklevel=2)
         else:
             client_config = subscriber_client_config.config
 
         if channel:
-            warnings.warn(
-                "The `channel` argument is deprecated; use " "`transport` instead.",
-                PendingDeprecationWarning,
-                stacklevel=2,
-            )
+            warnings.warn('The `channel` argument is deprecated; use '
+                          '`transport` instead.',
+                          PendingDeprecationWarning, stacklevel=2)
 
         api_endpoint = self.SERVICE_ADDRESS
         if client_options:
             if type(client_options) == dict:
-                client_options = google.api_core.client_options.from_dict(
-                    client_options
-                )
+                client_options = google.api_core.client_options.from_dict(client_options)
             if client_options.api_endpoint:
                 api_endpoint = client_options.api_endpoint
 
@@ -203,18 +197,20 @@ class SubscriberClient(object):
             else:
                 if credentials:
                     raise ValueError(
-                        "Received both a transport instance and "
-                        "credentials; these are mutually exclusive."
+                        'Received both a transport instance and '
+                        'credentials; these are mutually exclusive.'
                     )
                 self.transport = transport
         else:
             self.transport = subscriber_grpc_transport.SubscriberGrpcTransport(
-                address=api_endpoint, channel=channel, credentials=credentials
+                address=api_endpoint,
+                channel=channel,
+                credentials=credentials,
             )
 
         if client_info is None:
             client_info = google.api_core.gapic_v1.client_info.ClientInfo(
-                gapic_version=_GAPIC_LIBRARY_VERSION
+                gapic_version=_GAPIC_LIBRARY_VERSION,
             )
         else:
             client_info.gapic_version = _GAPIC_LIBRARY_VERSION
@@ -225,7 +221,7 @@ class SubscriberClient(object):
         # (Ordinarily, these are the defaults specified in the `*_config.py`
         # file next to this one.)
         self._method_configs = google.api_core.gapic_v1.config.parse_method_configs(
-            client_config["interfaces"][self._INTERFACE_NAME]
+            client_config['interfaces'][self._INTERFACE_NAME],
         )
 
         # Save a dictionary of cached API call functions.
@@ -236,21 +232,20 @@ class SubscriberClient(object):
 
     # Service calls
     def create_subscription(
-        self,
-        name,
-        topic,
-        push_config=None,
-        ack_deadline_seconds=None,
-        retain_acked_messages=None,
-        message_retention_duration=None,
-        labels=None,
-        enable_message_ordering=None,
-        expiration_policy=None,
-        dead_letter_policy=None,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
+            self,
+            name,
+            topic,
+            push_config=None,
+            ack_deadline_seconds=None,
+            retain_acked_messages=None,
+            message_retention_duration=None,
+            labels=None,
+            enable_message_ordering=None,
+            expiration_policy=None,
+            dead_letter_policy=None,
+            retry=google.api_core.gapic_v1.method.DEFAULT,
+            timeout=google.api_core.gapic_v1.method.DEFAULT,
+            metadata=None):
         """
         Creates a subscription to a given topic. See the resource name rules. If
         the subscription already exists, returns ``ALREADY_EXISTS``. If the
@@ -375,13 +370,11 @@ class SubscriberClient(object):
             ValueError: If the parameters are invalid.
         """
         # Wrap the transport method to add retry and timeout logic.
-        if "create_subscription" not in self._inner_api_calls:
-            self._inner_api_calls[
-                "create_subscription"
-            ] = google.api_core.gapic_v1.method.wrap_method(
+        if 'create_subscription' not in self._inner_api_calls:
+            self._inner_api_calls['create_subscription'] = google.api_core.gapic_v1.method.wrap_method(
                 self.transport.create_subscription,
-                default_retry=self._method_configs["CreateSubscription"].retry,
-                default_timeout=self._method_configs["CreateSubscription"].timeout,
+                default_retry=self._method_configs['CreateSubscription'].retry,
+                default_timeout=self._method_configs['CreateSubscription'].timeout,
                 client_info=self._client_info,
             )
 
@@ -401,26 +394,21 @@ class SubscriberClient(object):
             metadata = []
         metadata = list(metadata)
         try:
-            routing_header = [("name", name)]
+            routing_header = [('name', name)]
         except AttributeError:
             pass
         else:
-            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(
-                routing_header
-            )
+            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(routing_header)
             metadata.append(routing_metadata)
 
-        return self._inner_api_calls["create_subscription"](
-            request, retry=retry, timeout=timeout, metadata=metadata
-        )
+        return self._inner_api_calls['create_subscription'](request, retry=retry, timeout=timeout, metadata=metadata)
 
     def get_subscription(
-        self,
-        subscription,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
+            self,
+            subscription,
+            retry=google.api_core.gapic_v1.method.DEFAULT,
+            timeout=google.api_core.gapic_v1.method.DEFAULT,
+            metadata=None):
         """
         Gets the configuration details of a subscription.
 
@@ -456,42 +444,37 @@ class SubscriberClient(object):
             ValueError: If the parameters are invalid.
         """
         # Wrap the transport method to add retry and timeout logic.
-        if "get_subscription" not in self._inner_api_calls:
-            self._inner_api_calls[
-                "get_subscription"
-            ] = google.api_core.gapic_v1.method.wrap_method(
+        if 'get_subscription' not in self._inner_api_calls:
+            self._inner_api_calls['get_subscription'] = google.api_core.gapic_v1.method.wrap_method(
                 self.transport.get_subscription,
-                default_retry=self._method_configs["GetSubscription"].retry,
-                default_timeout=self._method_configs["GetSubscription"].timeout,
+                default_retry=self._method_configs['GetSubscription'].retry,
+                default_timeout=self._method_configs['GetSubscription'].timeout,
                 client_info=self._client_info,
             )
 
-        request = pubsub_pb2.GetSubscriptionRequest(subscription=subscription)
+        request = pubsub_pb2.GetSubscriptionRequest(
+            subscription=subscription,
+        )
         if metadata is None:
             metadata = []
         metadata = list(metadata)
         try:
-            routing_header = [("subscription", subscription)]
+            routing_header = [('subscription', subscription)]
         except AttributeError:
             pass
         else:
-            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(
-                routing_header
-            )
+            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(routing_header)
             metadata.append(routing_metadata)
 
-        return self._inner_api_calls["get_subscription"](
-            request, retry=retry, timeout=timeout, metadata=metadata
-        )
+        return self._inner_api_calls['get_subscription'](request, retry=retry, timeout=timeout, metadata=metadata)
 
     def update_subscription(
-        self,
-        subscription,
-        update_mask,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
+            self,
+            subscription,
+            update_mask,
+            retry=google.api_core.gapic_v1.method.DEFAULT,
+            timeout=google.api_core.gapic_v1.method.DEFAULT,
+            metadata=None):
         """
         Updates an existing subscription. Note that certain properties of a
         subscription, such as its topic, are not modifiable.
@@ -539,44 +522,38 @@ class SubscriberClient(object):
             ValueError: If the parameters are invalid.
         """
         # Wrap the transport method to add retry and timeout logic.
-        if "update_subscription" not in self._inner_api_calls:
-            self._inner_api_calls[
-                "update_subscription"
-            ] = google.api_core.gapic_v1.method.wrap_method(
+        if 'update_subscription' not in self._inner_api_calls:
+            self._inner_api_calls['update_subscription'] = google.api_core.gapic_v1.method.wrap_method(
                 self.transport.update_subscription,
-                default_retry=self._method_configs["UpdateSubscription"].retry,
-                default_timeout=self._method_configs["UpdateSubscription"].timeout,
+                default_retry=self._method_configs['UpdateSubscription'].retry,
+                default_timeout=self._method_configs['UpdateSubscription'].timeout,
                 client_info=self._client_info,
             )
 
         request = pubsub_pb2.UpdateSubscriptionRequest(
-            subscription=subscription, update_mask=update_mask
+            subscription=subscription,
+            update_mask=update_mask,
         )
         if metadata is None:
             metadata = []
         metadata = list(metadata)
         try:
-            routing_header = [("subscription.name", subscription.name)]
+            routing_header = [('subscription.name', subscription.name)]
         except AttributeError:
             pass
         else:
-            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(
-                routing_header
-            )
+            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(routing_header)
             metadata.append(routing_metadata)
 
-        return self._inner_api_calls["update_subscription"](
-            request, retry=retry, timeout=timeout, metadata=metadata
-        )
+        return self._inner_api_calls['update_subscription'](request, retry=retry, timeout=timeout, metadata=metadata)
 
     def list_subscriptions(
-        self,
-        project,
-        page_size=None,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
+            self,
+            project,
+            page_size=None,
+            retry=google.api_core.gapic_v1.method.DEFAULT,
+            timeout=google.api_core.gapic_v1.method.DEFAULT,
+            metadata=None):
         """
         Lists matching subscriptions.
 
@@ -632,54 +609,45 @@ class SubscriberClient(object):
             ValueError: If the parameters are invalid.
         """
         # Wrap the transport method to add retry and timeout logic.
-        if "list_subscriptions" not in self._inner_api_calls:
-            self._inner_api_calls[
-                "list_subscriptions"
-            ] = google.api_core.gapic_v1.method.wrap_method(
+        if 'list_subscriptions' not in self._inner_api_calls:
+            self._inner_api_calls['list_subscriptions'] = google.api_core.gapic_v1.method.wrap_method(
                 self.transport.list_subscriptions,
-                default_retry=self._method_configs["ListSubscriptions"].retry,
-                default_timeout=self._method_configs["ListSubscriptions"].timeout,
+                default_retry=self._method_configs['ListSubscriptions'].retry,
+                default_timeout=self._method_configs['ListSubscriptions'].timeout,
                 client_info=self._client_info,
             )
 
         request = pubsub_pb2.ListSubscriptionsRequest(
-            project=project, page_size=page_size
+            project=project,
+            page_size=page_size,
         )
         if metadata is None:
             metadata = []
         metadata = list(metadata)
         try:
-            routing_header = [("project", project)]
+            routing_header = [('project', project)]
         except AttributeError:
             pass
         else:
-            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(
-                routing_header
-            )
+            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(routing_header)
             metadata.append(routing_metadata)
 
         iterator = google.api_core.page_iterator.GRPCIterator(
             client=None,
-            method=functools.partial(
-                self._inner_api_calls["list_subscriptions"],
-                retry=retry,
-                timeout=timeout,
-                metadata=metadata,
-            ),
+            method=functools.partial(self._inner_api_calls['list_subscriptions'], retry=retry, timeout=timeout, metadata=metadata),
             request=request,
-            items_field="subscriptions",
-            request_token_field="page_token",
-            response_token_field="next_page_token",
+            items_field='subscriptions',
+            request_token_field='page_token',
+            response_token_field='next_page_token',
         )
         return iterator
 
     def delete_subscription(
-        self,
-        subscription,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
+            self,
+            subscription,
+            retry=google.api_core.gapic_v1.method.DEFAULT,
+            timeout=google.api_core.gapic_v1.method.DEFAULT,
+            metadata=None):
         """
         Deletes an existing subscription. All messages retained in the
         subscription are immediately dropped. Calls to ``Pull`` after deletion
@@ -717,43 +685,38 @@ class SubscriberClient(object):
             ValueError: If the parameters are invalid.
         """
         # Wrap the transport method to add retry and timeout logic.
-        if "delete_subscription" not in self._inner_api_calls:
-            self._inner_api_calls[
-                "delete_subscription"
-            ] = google.api_core.gapic_v1.method.wrap_method(
+        if 'delete_subscription' not in self._inner_api_calls:
+            self._inner_api_calls['delete_subscription'] = google.api_core.gapic_v1.method.wrap_method(
                 self.transport.delete_subscription,
-                default_retry=self._method_configs["DeleteSubscription"].retry,
-                default_timeout=self._method_configs["DeleteSubscription"].timeout,
+                default_retry=self._method_configs['DeleteSubscription'].retry,
+                default_timeout=self._method_configs['DeleteSubscription'].timeout,
                 client_info=self._client_info,
             )
 
-        request = pubsub_pb2.DeleteSubscriptionRequest(subscription=subscription)
+        request = pubsub_pb2.DeleteSubscriptionRequest(
+            subscription=subscription,
+        )
         if metadata is None:
             metadata = []
         metadata = list(metadata)
         try:
-            routing_header = [("subscription", subscription)]
+            routing_header = [('subscription', subscription)]
         except AttributeError:
             pass
         else:
-            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(
-                routing_header
-            )
+            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(routing_header)
             metadata.append(routing_metadata)
 
-        self._inner_api_calls["delete_subscription"](
-            request, retry=retry, timeout=timeout, metadata=metadata
-        )
+        self._inner_api_calls['delete_subscription'](request, retry=retry, timeout=timeout, metadata=metadata)
 
     def modify_ack_deadline(
-        self,
-        subscription,
-        ack_ids,
-        ack_deadline_seconds,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
+            self,
+            subscription,
+            ack_ids,
+            ack_deadline_seconds,
+            retry=google.api_core.gapic_v1.method.DEFAULT,
+            timeout=google.api_core.gapic_v1.method.DEFAULT,
+            metadata=None):
         """
         Modifies the ack deadline for a specific message. This method is useful
         to indicate that more time is needed to process a message by the
@@ -805,13 +768,11 @@ class SubscriberClient(object):
             ValueError: If the parameters are invalid.
         """
         # Wrap the transport method to add retry and timeout logic.
-        if "modify_ack_deadline" not in self._inner_api_calls:
-            self._inner_api_calls[
-                "modify_ack_deadline"
-            ] = google.api_core.gapic_v1.method.wrap_method(
+        if 'modify_ack_deadline' not in self._inner_api_calls:
+            self._inner_api_calls['modify_ack_deadline'] = google.api_core.gapic_v1.method.wrap_method(
                 self.transport.modify_ack_deadline,
-                default_retry=self._method_configs["ModifyAckDeadline"].retry,
-                default_timeout=self._method_configs["ModifyAckDeadline"].timeout,
+                default_retry=self._method_configs['ModifyAckDeadline'].retry,
+                default_timeout=self._method_configs['ModifyAckDeadline'].timeout,
                 client_info=self._client_info,
             )
 
@@ -824,27 +785,22 @@ class SubscriberClient(object):
             metadata = []
         metadata = list(metadata)
         try:
-            routing_header = [("subscription", subscription)]
+            routing_header = [('subscription', subscription)]
         except AttributeError:
             pass
         else:
-            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(
-                routing_header
-            )
+            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(routing_header)
             metadata.append(routing_metadata)
 
-        self._inner_api_calls["modify_ack_deadline"](
-            request, retry=retry, timeout=timeout, metadata=metadata
-        )
+        self._inner_api_calls['modify_ack_deadline'](request, retry=retry, timeout=timeout, metadata=metadata)
 
     def acknowledge(
-        self,
-        subscription,
-        ack_ids,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
+            self,
+            subscription,
+            ack_ids,
+            retry=google.api_core.gapic_v1.method.DEFAULT,
+            timeout=google.api_core.gapic_v1.method.DEFAULT,
+            metadata=None):
         """
         Acknowledges the messages associated with the ``ack_ids`` in the
         ``AcknowledgeRequest``. The Pub/Sub system can remove the relevant
@@ -889,45 +845,39 @@ class SubscriberClient(object):
             ValueError: If the parameters are invalid.
         """
         # Wrap the transport method to add retry and timeout logic.
-        if "acknowledge" not in self._inner_api_calls:
-            self._inner_api_calls[
-                "acknowledge"
-            ] = google.api_core.gapic_v1.method.wrap_method(
+        if 'acknowledge' not in self._inner_api_calls:
+            self._inner_api_calls['acknowledge'] = google.api_core.gapic_v1.method.wrap_method(
                 self.transport.acknowledge,
-                default_retry=self._method_configs["Acknowledge"].retry,
-                default_timeout=self._method_configs["Acknowledge"].timeout,
+                default_retry=self._method_configs['Acknowledge'].retry,
+                default_timeout=self._method_configs['Acknowledge'].timeout,
                 client_info=self._client_info,
             )
 
         request = pubsub_pb2.AcknowledgeRequest(
-            subscription=subscription, ack_ids=ack_ids
+            subscription=subscription,
+            ack_ids=ack_ids,
         )
         if metadata is None:
             metadata = []
         metadata = list(metadata)
         try:
-            routing_header = [("subscription", subscription)]
+            routing_header = [('subscription', subscription)]
         except AttributeError:
             pass
         else:
-            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(
-                routing_header
-            )
+            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(routing_header)
             metadata.append(routing_metadata)
 
-        self._inner_api_calls["acknowledge"](
-            request, retry=retry, timeout=timeout, metadata=metadata
-        )
+        self._inner_api_calls['acknowledge'](request, retry=retry, timeout=timeout, metadata=metadata)
 
     def pull(
-        self,
-        subscription,
-        max_messages,
-        return_immediately=None,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
+            self,
+            subscription,
+            max_messages,
+            return_immediately=None,
+            retry=google.api_core.gapic_v1.method.DEFAULT,
+            timeout=google.api_core.gapic_v1.method.DEFAULT,
+            metadata=None):
         """
         Pulls messages from the server. The server may return ``UNAVAILABLE`` if
         there are too many concurrent pull requests pending for the given
@@ -975,11 +925,11 @@ class SubscriberClient(object):
             ValueError: If the parameters are invalid.
         """
         # Wrap the transport method to add retry and timeout logic.
-        if "pull" not in self._inner_api_calls:
-            self._inner_api_calls["pull"] = google.api_core.gapic_v1.method.wrap_method(
+        if 'pull' not in self._inner_api_calls:
+            self._inner_api_calls['pull'] = google.api_core.gapic_v1.method.wrap_method(
                 self.transport.pull,
-                default_retry=self._method_configs["Pull"].retry,
-                default_timeout=self._method_configs["Pull"].timeout,
+                default_retry=self._method_configs['Pull'].retry,
+                default_timeout=self._method_configs['Pull'].timeout,
                 client_info=self._client_info,
             )
 
@@ -992,26 +942,21 @@ class SubscriberClient(object):
             metadata = []
         metadata = list(metadata)
         try:
-            routing_header = [("subscription", subscription)]
+            routing_header = [('subscription', subscription)]
         except AttributeError:
             pass
         else:
-            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(
-                routing_header
-            )
+            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(routing_header)
             metadata.append(routing_metadata)
 
-        return self._inner_api_calls["pull"](
-            request, retry=retry, timeout=timeout, metadata=metadata
-        )
+        return self._inner_api_calls['pull'](request, retry=retry, timeout=timeout, metadata=metadata)
 
     def streaming_pull(
-        self,
-        requests,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
+            self,
+            requests,
+            retry=google.api_core.gapic_v1.method.DEFAULT,
+            timeout=google.api_core.gapic_v1.method.DEFAULT,
+            metadata=None):
         """
         Establishes a stream with the server, which sends messages down to the
         client. The client streams acknowledgements and ack deadline
@@ -1062,28 +1007,23 @@ class SubscriberClient(object):
             ValueError: If the parameters are invalid.
         """
         # Wrap the transport method to add retry and timeout logic.
-        if "streaming_pull" not in self._inner_api_calls:
-            self._inner_api_calls[
-                "streaming_pull"
-            ] = google.api_core.gapic_v1.method.wrap_method(
+        if 'streaming_pull' not in self._inner_api_calls:
+            self._inner_api_calls['streaming_pull'] = google.api_core.gapic_v1.method.wrap_method(
                 self.transport.streaming_pull,
-                default_retry=self._method_configs["StreamingPull"].retry,
-                default_timeout=self._method_configs["StreamingPull"].timeout,
+                default_retry=self._method_configs['StreamingPull'].retry,
+                default_timeout=self._method_configs['StreamingPull'].timeout,
                 client_info=self._client_info,
             )
 
-        return self._inner_api_calls["streaming_pull"](
-            requests, retry=retry, timeout=timeout, metadata=metadata
-        )
+        return self._inner_api_calls['streaming_pull'](requests, retry=retry, timeout=timeout, metadata=metadata)
 
     def modify_push_config(
-        self,
-        subscription,
-        push_config,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
+            self,
+            subscription,
+            push_config,
+            retry=google.api_core.gapic_v1.method.DEFAULT,
+            timeout=google.api_core.gapic_v1.method.DEFAULT,
+            metadata=None):
         """
         Modifies the ``PushConfig`` for a specified subscription.
 
@@ -1134,44 +1074,38 @@ class SubscriberClient(object):
             ValueError: If the parameters are invalid.
         """
         # Wrap the transport method to add retry and timeout logic.
-        if "modify_push_config" not in self._inner_api_calls:
-            self._inner_api_calls[
-                "modify_push_config"
-            ] = google.api_core.gapic_v1.method.wrap_method(
+        if 'modify_push_config' not in self._inner_api_calls:
+            self._inner_api_calls['modify_push_config'] = google.api_core.gapic_v1.method.wrap_method(
                 self.transport.modify_push_config,
-                default_retry=self._method_configs["ModifyPushConfig"].retry,
-                default_timeout=self._method_configs["ModifyPushConfig"].timeout,
+                default_retry=self._method_configs['ModifyPushConfig'].retry,
+                default_timeout=self._method_configs['ModifyPushConfig'].timeout,
                 client_info=self._client_info,
             )
 
         request = pubsub_pb2.ModifyPushConfigRequest(
-            subscription=subscription, push_config=push_config
+            subscription=subscription,
+            push_config=push_config,
         )
         if metadata is None:
             metadata = []
         metadata = list(metadata)
         try:
-            routing_header = [("subscription", subscription)]
+            routing_header = [('subscription', subscription)]
         except AttributeError:
             pass
         else:
-            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(
-                routing_header
-            )
+            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(routing_header)
             metadata.append(routing_metadata)
 
-        self._inner_api_calls["modify_push_config"](
-            request, retry=retry, timeout=timeout, metadata=metadata
-        )
+        self._inner_api_calls['modify_push_config'](request, retry=retry, timeout=timeout, metadata=metadata)
 
     def list_snapshots(
-        self,
-        project,
-        page_size=None,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
+            self,
+            project,
+            page_size=None,
+            retry=google.api_core.gapic_v1.method.DEFAULT,
+            timeout=google.api_core.gapic_v1.method.DEFAULT,
+            metadata=None):
         """
         Lists the existing snapshots. Snapshots are used in
         <a href="https://cloud.google.com/pubsub/docs/replay-overview">Seek</a>
@@ -1232,54 +1166,47 @@ class SubscriberClient(object):
             ValueError: If the parameters are invalid.
         """
         # Wrap the transport method to add retry and timeout logic.
-        if "list_snapshots" not in self._inner_api_calls:
-            self._inner_api_calls[
-                "list_snapshots"
-            ] = google.api_core.gapic_v1.method.wrap_method(
+        if 'list_snapshots' not in self._inner_api_calls:
+            self._inner_api_calls['list_snapshots'] = google.api_core.gapic_v1.method.wrap_method(
                 self.transport.list_snapshots,
-                default_retry=self._method_configs["ListSnapshots"].retry,
-                default_timeout=self._method_configs["ListSnapshots"].timeout,
+                default_retry=self._method_configs['ListSnapshots'].retry,
+                default_timeout=self._method_configs['ListSnapshots'].timeout,
                 client_info=self._client_info,
             )
 
-        request = pubsub_pb2.ListSnapshotsRequest(project=project, page_size=page_size)
+        request = pubsub_pb2.ListSnapshotsRequest(
+            project=project,
+            page_size=page_size,
+        )
         if metadata is None:
             metadata = []
         metadata = list(metadata)
         try:
-            routing_header = [("project", project)]
+            routing_header = [('project', project)]
         except AttributeError:
             pass
         else:
-            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(
-                routing_header
-            )
+            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(routing_header)
             metadata.append(routing_metadata)
 
         iterator = google.api_core.page_iterator.GRPCIterator(
             client=None,
-            method=functools.partial(
-                self._inner_api_calls["list_snapshots"],
-                retry=retry,
-                timeout=timeout,
-                metadata=metadata,
-            ),
+            method=functools.partial(self._inner_api_calls['list_snapshots'], retry=retry, timeout=timeout, metadata=metadata),
             request=request,
-            items_field="snapshots",
-            request_token_field="page_token",
-            response_token_field="next_page_token",
+            items_field='snapshots',
+            request_token_field='page_token',
+            response_token_field='next_page_token',
         )
         return iterator
 
     def create_snapshot(
-        self,
-        name,
-        subscription,
-        labels=None,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
+            self,
+            name,
+            subscription,
+            labels=None,
+            retry=google.api_core.gapic_v1.method.DEFAULT,
+            timeout=google.api_core.gapic_v1.method.DEFAULT,
+            metadata=None):
         """
         Creates a snapshot from the requested subscription. Snapshots are used
         in Seek operations, which allow you to manage message acknowledgments in
@@ -1342,44 +1269,39 @@ class SubscriberClient(object):
             ValueError: If the parameters are invalid.
         """
         # Wrap the transport method to add retry and timeout logic.
-        if "create_snapshot" not in self._inner_api_calls:
-            self._inner_api_calls[
-                "create_snapshot"
-            ] = google.api_core.gapic_v1.method.wrap_method(
+        if 'create_snapshot' not in self._inner_api_calls:
+            self._inner_api_calls['create_snapshot'] = google.api_core.gapic_v1.method.wrap_method(
                 self.transport.create_snapshot,
-                default_retry=self._method_configs["CreateSnapshot"].retry,
-                default_timeout=self._method_configs["CreateSnapshot"].timeout,
+                default_retry=self._method_configs['CreateSnapshot'].retry,
+                default_timeout=self._method_configs['CreateSnapshot'].timeout,
                 client_info=self._client_info,
             )
 
         request = pubsub_pb2.CreateSnapshotRequest(
-            name=name, subscription=subscription, labels=labels
+            name=name,
+            subscription=subscription,
+            labels=labels,
         )
         if metadata is None:
             metadata = []
         metadata = list(metadata)
         try:
-            routing_header = [("name", name)]
+            routing_header = [('name', name)]
         except AttributeError:
             pass
         else:
-            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(
-                routing_header
-            )
+            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(routing_header)
             metadata.append(routing_metadata)
 
-        return self._inner_api_calls["create_snapshot"](
-            request, retry=retry, timeout=timeout, metadata=metadata
-        )
+        return self._inner_api_calls['create_snapshot'](request, retry=retry, timeout=timeout, metadata=metadata)
 
     def update_snapshot(
-        self,
-        snapshot,
-        update_mask,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
+            self,
+            snapshot,
+            update_mask,
+            retry=google.api_core.gapic_v1.method.DEFAULT,
+            timeout=google.api_core.gapic_v1.method.DEFAULT,
+            metadata=None):
         """
         Updates an existing snapshot. Snapshots are used in
         <a href="https://cloud.google.com/pubsub/docs/replay-overview">Seek</a>
@@ -1432,43 +1354,37 @@ class SubscriberClient(object):
             ValueError: If the parameters are invalid.
         """
         # Wrap the transport method to add retry and timeout logic.
-        if "update_snapshot" not in self._inner_api_calls:
-            self._inner_api_calls[
-                "update_snapshot"
-            ] = google.api_core.gapic_v1.method.wrap_method(
+        if 'update_snapshot' not in self._inner_api_calls:
+            self._inner_api_calls['update_snapshot'] = google.api_core.gapic_v1.method.wrap_method(
                 self.transport.update_snapshot,
-                default_retry=self._method_configs["UpdateSnapshot"].retry,
-                default_timeout=self._method_configs["UpdateSnapshot"].timeout,
+                default_retry=self._method_configs['UpdateSnapshot'].retry,
+                default_timeout=self._method_configs['UpdateSnapshot'].timeout,
                 client_info=self._client_info,
             )
 
         request = pubsub_pb2.UpdateSnapshotRequest(
-            snapshot=snapshot, update_mask=update_mask
+            snapshot=snapshot,
+            update_mask=update_mask,
         )
         if metadata is None:
             metadata = []
         metadata = list(metadata)
         try:
-            routing_header = [("snapshot.name", snapshot.name)]
+            routing_header = [('snapshot.name', snapshot.name)]
         except AttributeError:
             pass
         else:
-            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(
-                routing_header
-            )
+            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(routing_header)
             metadata.append(routing_metadata)
 
-        return self._inner_api_calls["update_snapshot"](
-            request, retry=retry, timeout=timeout, metadata=metadata
-        )
+        return self._inner_api_calls['update_snapshot'](request, retry=retry, timeout=timeout, metadata=metadata)
 
     def delete_snapshot(
-        self,
-        snapshot,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
+            self,
+            snapshot,
+            retry=google.api_core.gapic_v1.method.DEFAULT,
+            timeout=google.api_core.gapic_v1.method.DEFAULT,
+            metadata=None):
         """
         Removes an existing snapshot. Snapshots are used in
         <a href="https://cloud.google.com/pubsub/docs/replay-overview">Seek</a>
@@ -1510,43 +1426,38 @@ class SubscriberClient(object):
             ValueError: If the parameters are invalid.
         """
         # Wrap the transport method to add retry and timeout logic.
-        if "delete_snapshot" not in self._inner_api_calls:
-            self._inner_api_calls[
-                "delete_snapshot"
-            ] = google.api_core.gapic_v1.method.wrap_method(
+        if 'delete_snapshot' not in self._inner_api_calls:
+            self._inner_api_calls['delete_snapshot'] = google.api_core.gapic_v1.method.wrap_method(
                 self.transport.delete_snapshot,
-                default_retry=self._method_configs["DeleteSnapshot"].retry,
-                default_timeout=self._method_configs["DeleteSnapshot"].timeout,
+                default_retry=self._method_configs['DeleteSnapshot'].retry,
+                default_timeout=self._method_configs['DeleteSnapshot'].timeout,
                 client_info=self._client_info,
             )
 
-        request = pubsub_pb2.DeleteSnapshotRequest(snapshot=snapshot)
+        request = pubsub_pb2.DeleteSnapshotRequest(
+            snapshot=snapshot,
+        )
         if metadata is None:
             metadata = []
         metadata = list(metadata)
         try:
-            routing_header = [("snapshot", snapshot)]
+            routing_header = [('snapshot', snapshot)]
         except AttributeError:
             pass
         else:
-            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(
-                routing_header
-            )
+            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(routing_header)
             metadata.append(routing_metadata)
 
-        self._inner_api_calls["delete_snapshot"](
-            request, retry=retry, timeout=timeout, metadata=metadata
-        )
+        self._inner_api_calls['delete_snapshot'](request, retry=retry, timeout=timeout, metadata=metadata)
 
     def seek(
-        self,
-        subscription,
-        time=None,
-        snapshot=None,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
+            self,
+            subscription,
+            time=None,
+            snapshot=None,
+            retry=google.api_core.gapic_v1.method.DEFAULT,
+            timeout=google.api_core.gapic_v1.method.DEFAULT,
+            metadata=None):
         """
         Seeks an existing subscription to a point in time or to a given snapshot,
         whichever is provided in the request. Snapshots are used in
@@ -1604,46 +1515,46 @@ class SubscriberClient(object):
             ValueError: If the parameters are invalid.
         """
         # Wrap the transport method to add retry and timeout logic.
-        if "seek" not in self._inner_api_calls:
-            self._inner_api_calls["seek"] = google.api_core.gapic_v1.method.wrap_method(
+        if 'seek' not in self._inner_api_calls:
+            self._inner_api_calls['seek'] = google.api_core.gapic_v1.method.wrap_method(
                 self.transport.seek,
-                default_retry=self._method_configs["Seek"].retry,
-                default_timeout=self._method_configs["Seek"].timeout,
+                default_retry=self._method_configs['Seek'].retry,
+                default_timeout=self._method_configs['Seek'].timeout,
                 client_info=self._client_info,
             )
 
         # Sanity check: We have some fields which are mutually exclusive;
         # raise ValueError if more than one is sent.
-        google.api_core.protobuf_helpers.check_oneof(time=time, snapshot=snapshot)
+        google.api_core.protobuf_helpers.check_oneof(
+            time=time,
+            snapshot=snapshot,
+        )
 
         request = pubsub_pb2.SeekRequest(
-            subscription=subscription, time=time, snapshot=snapshot
+            subscription=subscription,
+            time=time,
+            snapshot=snapshot,
         )
         if metadata is None:
             metadata = []
         metadata = list(metadata)
         try:
-            routing_header = [("subscription", subscription)]
+            routing_header = [('subscription', subscription)]
         except AttributeError:
             pass
         else:
-            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(
-                routing_header
-            )
+            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(routing_header)
             metadata.append(routing_metadata)
 
-        return self._inner_api_calls["seek"](
-            request, retry=retry, timeout=timeout, metadata=metadata
-        )
+        return self._inner_api_calls['seek'](request, retry=retry, timeout=timeout, metadata=metadata)
 
     def set_iam_policy(
-        self,
-        resource,
-        policy,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
+            self,
+            resource,
+            policy,
+            retry=google.api_core.gapic_v1.method.DEFAULT,
+            timeout=google.api_core.gapic_v1.method.DEFAULT,
+            metadata=None):
         """
         Sets the access control policy on the specified resource. Replaces any
         existing policy.
@@ -1690,42 +1601,38 @@ class SubscriberClient(object):
             ValueError: If the parameters are invalid.
         """
         # Wrap the transport method to add retry and timeout logic.
-        if "set_iam_policy" not in self._inner_api_calls:
-            self._inner_api_calls[
-                "set_iam_policy"
-            ] = google.api_core.gapic_v1.method.wrap_method(
+        if 'set_iam_policy' not in self._inner_api_calls:
+            self._inner_api_calls['set_iam_policy'] = google.api_core.gapic_v1.method.wrap_method(
                 self.transport.set_iam_policy,
-                default_retry=self._method_configs["SetIamPolicy"].retry,
-                default_timeout=self._method_configs["SetIamPolicy"].timeout,
+                default_retry=self._method_configs['SetIamPolicy'].retry,
+                default_timeout=self._method_configs['SetIamPolicy'].timeout,
                 client_info=self._client_info,
             )
 
-        request = iam_policy_pb2.SetIamPolicyRequest(resource=resource, policy=policy)
+        request = iam_policy_pb2.SetIamPolicyRequest(
+            resource=resource,
+            policy=policy,
+        )
         if metadata is None:
             metadata = []
         metadata = list(metadata)
         try:
-            routing_header = [("resource", resource)]
+            routing_header = [('resource', resource)]
         except AttributeError:
             pass
         else:
-            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(
-                routing_header
-            )
+            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(routing_header)
             metadata.append(routing_metadata)
 
-        return self._inner_api_calls["set_iam_policy"](
-            request, retry=retry, timeout=timeout, metadata=metadata
-        )
+        return self._inner_api_calls['set_iam_policy'](request, retry=retry, timeout=timeout, metadata=metadata)
 
     def get_iam_policy(
-        self,
-        resource,
-        options_=None,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
+            self,
+            resource,
+            options_=None,
+            retry=google.api_core.gapic_v1.method.DEFAULT,
+            timeout=google.api_core.gapic_v1.method.DEFAULT,
+            metadata=None):
         """
         Gets the access control policy for a resource.
         Returns an empty policy if the resource exists and does not have a policy
@@ -1768,44 +1675,38 @@ class SubscriberClient(object):
             ValueError: If the parameters are invalid.
         """
         # Wrap the transport method to add retry and timeout logic.
-        if "get_iam_policy" not in self._inner_api_calls:
-            self._inner_api_calls[
-                "get_iam_policy"
-            ] = google.api_core.gapic_v1.method.wrap_method(
+        if 'get_iam_policy' not in self._inner_api_calls:
+            self._inner_api_calls['get_iam_policy'] = google.api_core.gapic_v1.method.wrap_method(
                 self.transport.get_iam_policy,
-                default_retry=self._method_configs["GetIamPolicy"].retry,
-                default_timeout=self._method_configs["GetIamPolicy"].timeout,
+                default_retry=self._method_configs['GetIamPolicy'].retry,
+                default_timeout=self._method_configs['GetIamPolicy'].timeout,
                 client_info=self._client_info,
             )
 
         request = iam_policy_pb2.GetIamPolicyRequest(
-            resource=resource, options=options_
+            resource=resource,
+            options=options_,
         )
         if metadata is None:
             metadata = []
         metadata = list(metadata)
         try:
-            routing_header = [("resource", resource)]
+            routing_header = [('resource', resource)]
         except AttributeError:
             pass
         else:
-            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(
-                routing_header
-            )
+            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(routing_header)
             metadata.append(routing_metadata)
 
-        return self._inner_api_calls["get_iam_policy"](
-            request, retry=retry, timeout=timeout, metadata=metadata
-        )
+        return self._inner_api_calls['get_iam_policy'](request, retry=retry, timeout=timeout, metadata=metadata)
 
     def test_iam_permissions(
-        self,
-        resource,
-        permissions,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
+            self,
+            resource,
+            permissions,
+            retry=google.api_core.gapic_v1.method.DEFAULT,
+            timeout=google.api_core.gapic_v1.method.DEFAULT,
+            metadata=None):
         """
         Returns permissions that a caller has on the specified resource. If the
         resource does not exist, this will return an empty set of permissions,
@@ -1854,32 +1755,27 @@ class SubscriberClient(object):
             ValueError: If the parameters are invalid.
         """
         # Wrap the transport method to add retry and timeout logic.
-        if "test_iam_permissions" not in self._inner_api_calls:
-            self._inner_api_calls[
-                "test_iam_permissions"
-            ] = google.api_core.gapic_v1.method.wrap_method(
+        if 'test_iam_permissions' not in self._inner_api_calls:
+            self._inner_api_calls['test_iam_permissions'] = google.api_core.gapic_v1.method.wrap_method(
                 self.transport.test_iam_permissions,
-                default_retry=self._method_configs["TestIamPermissions"].retry,
-                default_timeout=self._method_configs["TestIamPermissions"].timeout,
+                default_retry=self._method_configs['TestIamPermissions'].retry,
+                default_timeout=self._method_configs['TestIamPermissions'].timeout,
                 client_info=self._client_info,
             )
 
         request = iam_policy_pb2.TestIamPermissionsRequest(
-            resource=resource, permissions=permissions
+            resource=resource,
+            permissions=permissions,
         )
         if metadata is None:
             metadata = []
         metadata = list(metadata)
         try:
-            routing_header = [("resource", resource)]
+            routing_header = [('resource', resource)]
         except AttributeError:
             pass
         else:
-            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(
-                routing_header
-            )
+            routing_metadata = google.api_core.gapic_v1.routing_header.to_grpc_metadata(routing_header)
             metadata.append(routing_metadata)
 
-        return self._inner_api_calls["test_iam_permissions"](
-            request, retry=retry, timeout=timeout, metadata=metadata
-        )
+        return self._inner_api_calls['test_iam_permissions'](request, retry=retry, timeout=timeout, metadata=metadata)

@@ -28,9 +28,9 @@ from google.protobuf import field_mask_pb2
 from google.protobuf import timestamp_pb2
 
 
+
 class MultiCallableStub(object):
     """Stub for the grpc.UnaryUnaryMultiCallable interface."""
-
     def __init__(self, method, channel_stub):
         self.method = method
         self.channel_stub = channel_stub
@@ -51,17 +51,16 @@ class MultiCallableStub(object):
 
 class ChannelStub(object):
     """Stub for the grpc.Channel interface."""
-
-    def __init__(self, responses=[]):
+    def __init__(self, responses = []):
         self.responses = responses
         self.requests = []
 
-    def unary_unary(self, method, request_serializer=None, response_deserializer=None):
+    def unary_unary(
+            self, method, request_serializer=None, response_deserializer=None):
         return MultiCallableStub(method, self)
 
     def stream_stream(
-        self, method, request_serializer=None, response_deserializer=None
-    ):
+            self, method, request_serializer=None, response_deserializer=None):
         return MultiCallableStub(method, self)
 
 
@@ -70,32 +69,27 @@ class CustomException(Exception):
 
 
 class TestSubscriberClient(object):
+
     def test_create_subscription(self):
         # Setup Expected Response
-        name_2 = "name2-1052831874"
-        topic_2 = "topic2-1139259102"
+        name_2 = 'name2-1052831874'
+        topic_2 = 'topic2-1139259102'
         ack_deadline_seconds = 2135351438
         retain_acked_messages = False
         enable_message_ordering = True
-        expected_response = {
-            "name": name_2,
-            "topic": topic_2,
-            "ack_deadline_seconds": ack_deadline_seconds,
-            "retain_acked_messages": retain_acked_messages,
-            "enable_message_ordering": enable_message_ordering,
-        }
+        expected_response = {'name': name_2, 'topic': topic_2, 'ack_deadline_seconds': ack_deadline_seconds, 'retain_acked_messages': retain_acked_messages, 'enable_message_ordering': enable_message_ordering}
         expected_response = pubsub_pb2.Subscription(**expected_response)
 
         # Mock the API response
-        channel = ChannelStub(responses=[expected_response])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [expected_response])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup Request
-        name = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
-        topic = client.topic_path("[PROJECT]", "[TOPIC]")
+        name = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
+        topic = client.topic_path('[PROJECT]', '[TOPIC]')
 
         response = client.create_subscription(name, topic)
         assert expected_response == response
@@ -107,44 +101,38 @@ class TestSubscriberClient(object):
 
     def test_create_subscription_exception(self):
         # Mock the API response
-        channel = ChannelStub(responses=[CustomException()])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [CustomException()])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup request
-        name = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
-        topic = client.topic_path("[PROJECT]", "[TOPIC]")
+        name = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
+        topic = client.topic_path('[PROJECT]', '[TOPIC]')
 
         with pytest.raises(CustomException):
             client.create_subscription(name, topic)
 
     def test_get_subscription(self):
         # Setup Expected Response
-        name = "name3373707"
-        topic = "topic110546223"
+        name = 'name3373707'
+        topic = 'topic110546223'
         ack_deadline_seconds = 2135351438
         retain_acked_messages = False
         enable_message_ordering = True
-        expected_response = {
-            "name": name,
-            "topic": topic,
-            "ack_deadline_seconds": ack_deadline_seconds,
-            "retain_acked_messages": retain_acked_messages,
-            "enable_message_ordering": enable_message_ordering,
-        }
+        expected_response = {'name': name, 'topic': topic, 'ack_deadline_seconds': ack_deadline_seconds, 'retain_acked_messages': retain_acked_messages, 'enable_message_ordering': enable_message_ordering}
         expected_response = pubsub_pb2.Subscription(**expected_response)
 
         # Mock the API response
-        channel = ChannelStub(responses=[expected_response])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [expected_response])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup Request
-        subscription = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        subscription = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
 
         response = client.get_subscription(subscription)
         assert expected_response == response
@@ -156,96 +144,85 @@ class TestSubscriberClient(object):
 
     def test_get_subscription_exception(self):
         # Mock the API response
-        channel = ChannelStub(responses=[CustomException()])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [CustomException()])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup request
-        subscription = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        subscription = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
 
         with pytest.raises(CustomException):
             client.get_subscription(subscription)
 
     def test_update_subscription(self):
         # Setup Expected Response
-        name = "name3373707"
-        topic = "topic110546223"
+        name = 'name3373707'
+        topic = 'topic110546223'
         ack_deadline_seconds_2 = 921632575
         retain_acked_messages = False
         enable_message_ordering = True
-        expected_response = {
-            "name": name,
-            "topic": topic,
-            "ack_deadline_seconds": ack_deadline_seconds_2,
-            "retain_acked_messages": retain_acked_messages,
-            "enable_message_ordering": enable_message_ordering,
-        }
+        expected_response = {'name': name, 'topic': topic, 'ack_deadline_seconds': ack_deadline_seconds_2, 'retain_acked_messages': retain_acked_messages, 'enable_message_ordering': enable_message_ordering}
         expected_response = pubsub_pb2.Subscription(**expected_response)
 
         # Mock the API response
-        channel = ChannelStub(responses=[expected_response])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [expected_response])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup Request
         ack_deadline_seconds = 42
-        subscription = {"ack_deadline_seconds": ack_deadline_seconds}
-        paths_element = "ack_deadline_seconds"
+        subscription = {'ack_deadline_seconds': ack_deadline_seconds}
+        paths_element = 'ack_deadline_seconds'
         paths = [paths_element]
-        update_mask = {"paths": paths}
+        update_mask = {'paths': paths}
 
         response = client.update_subscription(subscription, update_mask)
         assert expected_response == response
 
         assert len(channel.requests) == 1
-        expected_request = pubsub_pb2.UpdateSubscriptionRequest(
-            subscription=subscription, update_mask=update_mask
-        )
+        expected_request = pubsub_pb2.UpdateSubscriptionRequest(subscription=subscription, update_mask=update_mask)
         actual_request = channel.requests[0][1]
         assert expected_request == actual_request
 
     def test_update_subscription_exception(self):
         # Mock the API response
-        channel = ChannelStub(responses=[CustomException()])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [CustomException()])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup request
         ack_deadline_seconds = 42
-        subscription = {"ack_deadline_seconds": ack_deadline_seconds}
-        paths_element = "ack_deadline_seconds"
+        subscription = {'ack_deadline_seconds': ack_deadline_seconds}
+        paths_element = 'ack_deadline_seconds'
         paths = [paths_element]
-        update_mask = {"paths": paths}
+        update_mask = {'paths': paths}
 
         with pytest.raises(CustomException):
             client.update_subscription(subscription, update_mask)
 
     def test_list_subscriptions(self):
         # Setup Expected Response
-        next_page_token = ""
+        next_page_token = ''
         subscriptions_element = {}
         subscriptions = [subscriptions_element]
-        expected_response = {
-            "next_page_token": next_page_token,
-            "subscriptions": subscriptions,
-        }
+        expected_response = {'next_page_token': next_page_token, 'subscriptions': subscriptions}
         expected_response = pubsub_pb2.ListSubscriptionsResponse(**expected_response)
 
         # Mock the API response
-        channel = ChannelStub(responses=[expected_response])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [expected_response])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup Request
-        project = client.project_path("[PROJECT]")
+        project = client.project_path('[PROJECT]')
 
         paged_list_response = client.list_subscriptions(project)
         resources = list(paged_list_response)
@@ -259,14 +236,14 @@ class TestSubscriberClient(object):
         assert expected_request == actual_request
 
     def test_list_subscriptions_exception(self):
-        channel = ChannelStub(responses=[CustomException()])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [CustomException()])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup request
-        project = client.project_path("[PROJECT]")
+        project = client.project_path('[PROJECT]')
 
         paged_list_response = client.list_subscriptions(project)
         with pytest.raises(CustomException):
@@ -274,70 +251,64 @@ class TestSubscriberClient(object):
 
     def test_delete_subscription(self):
         channel = ChannelStub()
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup Request
-        subscription = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        subscription = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
 
         client.delete_subscription(subscription)
 
         assert len(channel.requests) == 1
-        expected_request = pubsub_pb2.DeleteSubscriptionRequest(
-            subscription=subscription
-        )
+        expected_request = pubsub_pb2.DeleteSubscriptionRequest(subscription=subscription)
         actual_request = channel.requests[0][1]
         assert expected_request == actual_request
 
     def test_delete_subscription_exception(self):
         # Mock the API response
-        channel = ChannelStub(responses=[CustomException()])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [CustomException()])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup request
-        subscription = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        subscription = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
 
         with pytest.raises(CustomException):
             client.delete_subscription(subscription)
 
     def test_modify_ack_deadline(self):
         channel = ChannelStub()
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup Request
-        subscription = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        subscription = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
         ack_ids = []
         ack_deadline_seconds = 2135351438
 
         client.modify_ack_deadline(subscription, ack_ids, ack_deadline_seconds)
 
         assert len(channel.requests) == 1
-        expected_request = pubsub_pb2.ModifyAckDeadlineRequest(
-            subscription=subscription,
-            ack_ids=ack_ids,
-            ack_deadline_seconds=ack_deadline_seconds,
-        )
+        expected_request = pubsub_pb2.ModifyAckDeadlineRequest(subscription=subscription, ack_ids=ack_ids, ack_deadline_seconds=ack_deadline_seconds)
         actual_request = channel.requests[0][1]
         assert expected_request == actual_request
 
     def test_modify_ack_deadline_exception(self):
         # Mock the API response
-        channel = ChannelStub(responses=[CustomException()])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [CustomException()])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup request
-        subscription = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        subscription = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
         ack_ids = []
         ack_deadline_seconds = 2135351438
 
@@ -346,34 +317,32 @@ class TestSubscriberClient(object):
 
     def test_acknowledge(self):
         channel = ChannelStub()
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup Request
-        subscription = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        subscription = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
         ack_ids = []
 
         client.acknowledge(subscription, ack_ids)
 
         assert len(channel.requests) == 1
-        expected_request = pubsub_pb2.AcknowledgeRequest(
-            subscription=subscription, ack_ids=ack_ids
-        )
+        expected_request = pubsub_pb2.AcknowledgeRequest(subscription=subscription, ack_ids=ack_ids)
         actual_request = channel.requests[0][1]
         assert expected_request == actual_request
 
     def test_acknowledge_exception(self):
         # Mock the API response
-        channel = ChannelStub(responses=[CustomException()])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [CustomException()])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup request
-        subscription = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        subscription = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
         ack_ids = []
 
         with pytest.raises(CustomException):
@@ -385,36 +354,34 @@ class TestSubscriberClient(object):
         expected_response = pubsub_pb2.PullResponse(**expected_response)
 
         # Mock the API response
-        channel = ChannelStub(responses=[expected_response])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [expected_response])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup Request
-        subscription = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        subscription = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
         max_messages = 496131527
 
         response = client.pull(subscription, max_messages)
         assert expected_response == response
 
         assert len(channel.requests) == 1
-        expected_request = pubsub_pb2.PullRequest(
-            subscription=subscription, max_messages=max_messages
-        )
+        expected_request = pubsub_pb2.PullRequest(subscription=subscription, max_messages=max_messages)
         actual_request = channel.requests[0][1]
         assert expected_request == actual_request
 
     def test_pull_exception(self):
         # Mock the API response
-        channel = ChannelStub(responses=[CustomException()])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [CustomException()])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup request
-        subscription = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        subscription = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
         max_messages = 496131527
 
         with pytest.raises(CustomException):
@@ -424,23 +391,20 @@ class TestSubscriberClient(object):
         # Setup Expected Response
         received_messages_element = {}
         received_messages = [received_messages_element]
-        expected_response = {"received_messages": received_messages}
+        expected_response = {'received_messages': received_messages}
         expected_response = pubsub_pb2.StreamingPullResponse(**expected_response)
 
         # Mock the API response
-        channel = ChannelStub(responses=[iter([expected_response])])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [iter([expected_response])])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup Request
-        subscription = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        subscription = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
         stream_ack_deadline_seconds = 1875467245
-        request = {
-            "subscription": subscription,
-            "stream_ack_deadline_seconds": stream_ack_deadline_seconds,
-        }
+        request = {'subscription': subscription, 'stream_ack_deadline_seconds': stream_ack_deadline_seconds}
         request = pubsub_pb2.StreamingPullRequest(**request)
         requests = [request]
 
@@ -457,19 +421,16 @@ class TestSubscriberClient(object):
 
     def test_streaming_pull_exception(self):
         # Mock the API response
-        channel = ChannelStub(responses=[CustomException()])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [CustomException()])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup request
-        subscription = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        subscription = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
         stream_ack_deadline_seconds = 1875467245
-        request = {
-            "subscription": subscription,
-            "stream_ack_deadline_seconds": stream_ack_deadline_seconds,
-        }
+        request = {'subscription': subscription, 'stream_ack_deadline_seconds': stream_ack_deadline_seconds}
 
         request = pubsub_pb2.StreamingPullRequest(**request)
         requests = [request]
@@ -479,34 +440,32 @@ class TestSubscriberClient(object):
 
     def test_modify_push_config(self):
         channel = ChannelStub()
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup Request
-        subscription = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        subscription = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
         push_config = {}
 
         client.modify_push_config(subscription, push_config)
 
         assert len(channel.requests) == 1
-        expected_request = pubsub_pb2.ModifyPushConfigRequest(
-            subscription=subscription, push_config=push_config
-        )
+        expected_request = pubsub_pb2.ModifyPushConfigRequest(subscription=subscription, push_config=push_config)
         actual_request = channel.requests[0][1]
         assert expected_request == actual_request
 
     def test_modify_push_config_exception(self):
         # Mock the API response
-        channel = ChannelStub(responses=[CustomException()])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [CustomException()])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup request
-        subscription = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        subscription = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
         push_config = {}
 
         with pytest.raises(CustomException):
@@ -514,21 +473,21 @@ class TestSubscriberClient(object):
 
     def test_list_snapshots(self):
         # Setup Expected Response
-        next_page_token = ""
+        next_page_token = ''
         snapshots_element = {}
         snapshots = [snapshots_element]
-        expected_response = {"next_page_token": next_page_token, "snapshots": snapshots}
+        expected_response = {'next_page_token': next_page_token, 'snapshots': snapshots}
         expected_response = pubsub_pb2.ListSnapshotsResponse(**expected_response)
 
         # Mock the API response
-        channel = ChannelStub(responses=[expected_response])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [expected_response])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup Request
-        project = client.project_path("[PROJECT]")
+        project = client.project_path('[PROJECT]')
 
         paged_list_response = client.list_snapshots(project)
         resources = list(paged_list_response)
@@ -542,14 +501,14 @@ class TestSubscriberClient(object):
         assert expected_request == actual_request
 
     def test_list_snapshots_exception(self):
-        channel = ChannelStub(responses=[CustomException()])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [CustomException()])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup request
-        project = client.project_path("[PROJECT]")
+        project = client.project_path('[PROJECT]')
 
         paged_list_response = client.list_snapshots(project)
         with pytest.raises(CustomException):
@@ -557,107 +516,103 @@ class TestSubscriberClient(object):
 
     def test_create_snapshot(self):
         # Setup Expected Response
-        name_2 = "name2-1052831874"
-        topic = "topic110546223"
-        expected_response = {"name": name_2, "topic": topic}
+        name_2 = 'name2-1052831874'
+        topic = 'topic110546223'
+        expected_response = {'name': name_2, 'topic': topic}
         expected_response = pubsub_pb2.Snapshot(**expected_response)
 
         # Mock the API response
-        channel = ChannelStub(responses=[expected_response])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [expected_response])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup Request
-        name = client.snapshot_path("[PROJECT]", "[SNAPSHOT]")
-        subscription = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        name = client.snapshot_path('[PROJECT]', '[SNAPSHOT]')
+        subscription = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
 
         response = client.create_snapshot(name, subscription)
         assert expected_response == response
 
         assert len(channel.requests) == 1
-        expected_request = pubsub_pb2.CreateSnapshotRequest(
-            name=name, subscription=subscription
-        )
+        expected_request = pubsub_pb2.CreateSnapshotRequest(name=name, subscription=subscription)
         actual_request = channel.requests[0][1]
         assert expected_request == actual_request
 
     def test_create_snapshot_exception(self):
         # Mock the API response
-        channel = ChannelStub(responses=[CustomException()])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [CustomException()])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup request
-        name = client.snapshot_path("[PROJECT]", "[SNAPSHOT]")
-        subscription = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        name = client.snapshot_path('[PROJECT]', '[SNAPSHOT]')
+        subscription = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
 
         with pytest.raises(CustomException):
             client.create_snapshot(name, subscription)
 
     def test_update_snapshot(self):
         # Setup Expected Response
-        name = "name3373707"
-        topic = "topic110546223"
-        expected_response = {"name": name, "topic": topic}
+        name = 'name3373707'
+        topic = 'topic110546223'
+        expected_response = {'name': name, 'topic': topic}
         expected_response = pubsub_pb2.Snapshot(**expected_response)
 
         # Mock the API response
-        channel = ChannelStub(responses=[expected_response])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [expected_response])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup Request
         seconds = 123456
-        expire_time = {"seconds": seconds}
-        snapshot = {"expire_time": expire_time}
-        paths_element = "expire_time"
+        expire_time = {'seconds': seconds}
+        snapshot = {'expire_time': expire_time}
+        paths_element = 'expire_time'
         paths = [paths_element]
-        update_mask = {"paths": paths}
+        update_mask = {'paths': paths}
 
         response = client.update_snapshot(snapshot, update_mask)
         assert expected_response == response
 
         assert len(channel.requests) == 1
-        expected_request = pubsub_pb2.UpdateSnapshotRequest(
-            snapshot=snapshot, update_mask=update_mask
-        )
+        expected_request = pubsub_pb2.UpdateSnapshotRequest(snapshot=snapshot, update_mask=update_mask)
         actual_request = channel.requests[0][1]
         assert expected_request == actual_request
 
     def test_update_snapshot_exception(self):
         # Mock the API response
-        channel = ChannelStub(responses=[CustomException()])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [CustomException()])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup request
         seconds = 123456
-        expire_time = {"seconds": seconds}
-        snapshot = {"expire_time": expire_time}
-        paths_element = "expire_time"
+        expire_time = {'seconds': seconds}
+        snapshot = {'expire_time': expire_time}
+        paths_element = 'expire_time'
         paths = [paths_element]
-        update_mask = {"paths": paths}
+        update_mask = {'paths': paths}
 
         with pytest.raises(CustomException):
             client.update_snapshot(snapshot, update_mask)
 
     def test_delete_snapshot(self):
         channel = ChannelStub()
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup Request
-        snapshot = client.snapshot_path("[PROJECT]", "[SNAPSHOT]")
+        snapshot = client.snapshot_path('[PROJECT]', '[SNAPSHOT]')
 
         client.delete_snapshot(snapshot)
 
@@ -668,14 +623,14 @@ class TestSubscriberClient(object):
 
     def test_delete_snapshot_exception(self):
         # Mock the API response
-        channel = ChannelStub(responses=[CustomException()])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [CustomException()])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup request
-        snapshot = client.snapshot_path("[PROJECT]", "[SNAPSHOT]")
+        snapshot = client.snapshot_path('[PROJECT]', '[SNAPSHOT]')
 
         with pytest.raises(CustomException):
             client.delete_snapshot(snapshot)
@@ -686,14 +641,14 @@ class TestSubscriberClient(object):
         expected_response = pubsub_pb2.SeekResponse(**expected_response)
 
         # Mock the API response
-        channel = ChannelStub(responses=[expected_response])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [expected_response])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup Request
-        subscription = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        subscription = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
 
         response = client.seek(subscription)
         assert expected_response == response
@@ -705,14 +660,14 @@ class TestSubscriberClient(object):
 
     def test_seek_exception(self):
         # Mock the API response
-        channel = ChannelStub(responses=[CustomException()])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [CustomException()])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup request
-        subscription = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        subscription = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
 
         with pytest.raises(CustomException):
             client.seek(subscription)
@@ -720,41 +675,39 @@ class TestSubscriberClient(object):
     def test_set_iam_policy(self):
         # Setup Expected Response
         version = 351608024
-        etag = b"21"
-        expected_response = {"version": version, "etag": etag}
+        etag = b'21'
+        expected_response = {'version': version, 'etag': etag}
         expected_response = policy_pb2.Policy(**expected_response)
 
         # Mock the API response
-        channel = ChannelStub(responses=[expected_response])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [expected_response])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup Request
-        resource = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        resource = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
         policy = {}
 
         response = client.set_iam_policy(resource, policy)
         assert expected_response == response
 
         assert len(channel.requests) == 1
-        expected_request = iam_policy_pb2.SetIamPolicyRequest(
-            resource=resource, policy=policy
-        )
+        expected_request = iam_policy_pb2.SetIamPolicyRequest(resource=resource, policy=policy)
         actual_request = channel.requests[0][1]
         assert expected_request == actual_request
 
     def test_set_iam_policy_exception(self):
         # Mock the API response
-        channel = ChannelStub(responses=[CustomException()])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [CustomException()])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup request
-        resource = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        resource = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
         policy = {}
 
         with pytest.raises(CustomException):
@@ -763,19 +716,19 @@ class TestSubscriberClient(object):
     def test_get_iam_policy(self):
         # Setup Expected Response
         version = 351608024
-        etag = b"21"
-        expected_response = {"version": version, "etag": etag}
+        etag = b'21'
+        expected_response = {'version': version, 'etag': etag}
         expected_response = policy_pb2.Policy(**expected_response)
 
         # Mock the API response
-        channel = ChannelStub(responses=[expected_response])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [expected_response])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup Request
-        resource = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        resource = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
 
         response = client.get_iam_policy(resource)
         assert expected_response == response
@@ -787,14 +740,14 @@ class TestSubscriberClient(object):
 
     def test_get_iam_policy_exception(self):
         # Mock the API response
-        channel = ChannelStub(responses=[CustomException()])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [CustomException()])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup request
-        resource = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        resource = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
 
         with pytest.raises(CustomException):
             client.get_iam_policy(resource)
@@ -802,41 +755,37 @@ class TestSubscriberClient(object):
     def test_test_iam_permissions(self):
         # Setup Expected Response
         expected_response = {}
-        expected_response = iam_policy_pb2.TestIamPermissionsResponse(
-            **expected_response
-        )
+        expected_response = iam_policy_pb2.TestIamPermissionsResponse(**expected_response)
 
         # Mock the API response
-        channel = ChannelStub(responses=[expected_response])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [expected_response])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup Request
-        resource = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        resource = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
         permissions = []
 
         response = client.test_iam_permissions(resource, permissions)
         assert expected_response == response
 
         assert len(channel.requests) == 1
-        expected_request = iam_policy_pb2.TestIamPermissionsRequest(
-            resource=resource, permissions=permissions
-        )
+        expected_request = iam_policy_pb2.TestIamPermissionsRequest(resource=resource, permissions=permissions)
         actual_request = channel.requests[0][1]
         assert expected_request == actual_request
 
     def test_test_iam_permissions_exception(self):
         # Mock the API response
-        channel = ChannelStub(responses=[CustomException()])
-        patch = mock.patch("google.api_core.grpc_helpers.create_channel")
+        channel = ChannelStub(responses = [CustomException()])
+        patch = mock.patch('google.api_core.grpc_helpers.create_channel')
         with patch as create_channel:
             create_channel.return_value = channel
             client = subscriber_client.SubscriberClient()
 
         # Setup request
-        resource = client.subscription_path("[PROJECT]", "[SUBSCRIPTION]")
+        resource = client.subscription_path('[PROJECT]', '[SUBSCRIPTION]')
         permissions = []
 
         with pytest.raises(CustomException):
